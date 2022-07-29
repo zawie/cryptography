@@ -1,11 +1,10 @@
-const ROUNDS: i8 = 8;
+const ROUNDS: u8 = 8;
 
 pub fn encrypt(data: u64, key: u64) -> u64 {
     let (mut left, mut right) = split(data);
 
     for round in 0..ROUNDS {
-        let k = (key >> (32/ROUNDS * round)) as u8; //u8 = u64/ROUNDS
-        (left, right) = swap(left ^ prng(right, k), right)
+        (left, right) = swap(left ^ prng(right, subkey(key, round)), right)
     }
 
     combine(swap(left, right))
@@ -15,8 +14,7 @@ pub fn decrypt(cipher: u64, key: u64) -> u64 {
     let (mut left, mut right) = split(cipher);
 
     for round in (0..ROUNDS).rev() {
-        let k = (key >> (32/ROUNDS * round)) as u8; //u8 = u64/ROUNDS
-        (left, right) = swap(left ^ prng(right, k), right)
+        (left, right) = swap(left ^ prng(right, subkey(key, round)), right)
     }
 
     combine(swap(left, right))
@@ -32,6 +30,10 @@ fn combine((l, r): (u32, u32)) -> u64 {
 
 fn swap(a: u32, b:u32) -> (u32, u32) {
     (b, a)
+}
+
+fn subkey(key: u64, idx: u8) -> u8 {
+    (key >> (32/ROUNDS * idx)) as u8 //u8 = u64/ROUNDS
 }
 
 /*
