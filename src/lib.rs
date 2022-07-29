@@ -4,8 +4,8 @@ pub fn encrypt(data: u64, key: u32) -> u64 {
     let (mut left, mut right) = split(data);
 
     for round in 0..ROUNDS {
-        let round_key = (key >> (32/ROUNDS * round)) as u8; //u8 = u32/ROUNDS
-        (left, right) = swap(left ^ round_function(right, round_key), right)
+        let k = (key >> (32/ROUNDS * round)) as u8; //u8 = u32/ROUNDS
+        (left, right) = swap(left ^ round_function(right, k), right)
     }
 
     combine(swap(left, right))
@@ -15,8 +15,8 @@ pub fn decrypt(cipher: u64, key: u32) -> u64 {
     let (mut left, mut right) = split(cipher);
 
     for round in (0..ROUNDS).rev() {
-        let round_key = (key >> (32/ROUNDS * round)) as u8; //u8 = u32/ROUNDS
-        (left, right) = swap(left ^ round_function(right, round_key), right)
+        let k = (key >> (32/ROUNDS * round)) as u8; //u8 = u32/ROUNDS
+        (left, right) = swap(left ^ round_function(right, k), right)
     }
 
     combine(swap(left, right))
