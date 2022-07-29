@@ -1,5 +1,5 @@
-use crypto::encrypt;
-use crypto::decrypt;
+use crypto::feisel::encrypt;
+use crypto::feisel::decrypt;
 
 fn main() {
     let data = 1234567890;
