@@ -1,22 +1,22 @@
-const ROUNDS: i8 = 4;
+const ROUNDS: i8 = 8;
 
-pub fn encrypt(data: u64, key: u32) -> u64 {
+pub fn encrypt(data: u64, key: u64) -> u64 {
     let (mut left, mut right) = split(data);
 
     for round in 0..ROUNDS {
-        let k = (key >> (32/ROUNDS * round)) as u8; //u8 = u32/ROUNDS
-        (left, right) = swap(left ^ round_function(right, k), right)
+        let k = (key >> (32/ROUNDS * round)) as u8; //u8 = u64/ROUNDS
+        (left, right) = swap(left ^ prng(right, k), right)
     }
 
     combine(swap(left, right))
 }
 
-pub fn decrypt(cipher: u64, key: u32) -> u64 {
+pub fn decrypt(cipher: u64, key: u64) -> u64 {
     let (mut left, mut right) = split(cipher);
 
     for round in (0..ROUNDS).rev() {
-        let k = (key >> (32/ROUNDS * round)) as u8; //u8 = u32/ROUNDS
-        (left, right) = swap(left ^ round_function(right, k), right)
+        let k = (key >> (32/ROUNDS * round)) as u8; //u8 = u64/ROUNDS
+        (left, right) = swap(left ^ prng(right, k), right)
     }
 
     combine(swap(left, right))
@@ -35,17 +35,12 @@ fn swap(a: u32, b:u32) -> (u32, u32) {
 }
 
 /*
-Xn+1 = (aXn + c) mod m
-where X is the sequence of pseudo-random values
-m, 0 < m  - modulus 
-a, 0 < a < m  - multiplier
-c, 0 ≤ c < m  - increment
-x0, 0 ≤ x0 < m  - the seed or start value
+    Psuedo-random number generator
 */
-fn round_function(seed: u32, k: u8) -> u32 {
+fn prng(seed: u32, c: u8) -> u32 {
     let mut x: u64 = seed as u64;
-    for _ in 0..16 {
-        x = (7919*x + (k as u64)) % u32::MAX as u64;
+    for _ in 0..4 {
+        x = (7919*x + (c as u64)) % u32::MAX as u64;
     }
     x as u32
 }
