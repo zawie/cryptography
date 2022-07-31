@@ -66,4 +66,12 @@ mod tests {
 
         assert_eq!(data, decrypt(encrypt(data,key),key));
     }
+
+    #[test]
+    fn test_reverse_key() {
+        let key: u64 = 0x0123456789abcdef;
+        let rev_key: u64 = 0xefcdab8967452301;
+
+        assert_eq!(rev_key, reverse_key(key));
+    }
 }
