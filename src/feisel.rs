@@ -1,23 +1,38 @@
 const ROUNDS: u8 = 8;
+const KEY_SIZE: u8 = 64;
 
 pub fn encrypt(data: u64, key: u64) -> u64 {
+
+    cipher(data, key)
+}
+
+pub fn decrypt(encrypted_data: u64, key: u64) -> u64 {
+
+    cipher(encrypted_data, reverse_key(key))
+}
+
+pub fn cipher(data: u64, key: u64) -> u64 {
     let (mut left, mut right) = split(data);
 
     for round in 0..ROUNDS {
-        (left, right) = (right, left ^ prng(right, subkey(key, round)))
+        (left, right) = (right, left ^ prng(right, subkey(key, round)));
     }
 
     combine((right, left))
 }
 
-pub fn decrypt(cipher: u64, key: u64) -> u64 {
-    let (mut left, mut right) = split(cipher);
+pub fn reverse_key(key: u64) -> u64 {
+    let mut rev_key: u64 = 0;
 
-    for round in (0..ROUNDS).rev() {
-        (left, right) = (right, left ^ prng(right, subkey(key, round)))
+    for i in (0..ROUNDS).rev() {
+        rev_key += (subkey(key, i) as u64) << (KEY_SIZE/ROUNDS * (ROUNDS - (i+1)));
     }
 
-    combine((right, left))
+    rev_key
+}
+
+fn subkey(key: u64, idx: u8) -> u8 {
+    (key >> (KEY_SIZE/ROUNDS * idx)) as u8
 }
 
 /*
@@ -28,6 +43,7 @@ fn prng(seed: u32, c: u8) -> u32 {
     for _ in 0..4 {
         x = (7919*x + (c as u64)) % u32::MAX as u64;
     }
+
     x as u32
 }
 
@@ -39,6 +55,15 @@ fn combine((l, r): (u32, u32)) -> u64 {
     ((l as u64) << 32) + (r as u64)
 }
 
-fn subkey(key: u64, idx: u8) -> u8 {
-    (key >> (32/ROUNDS * idx)) as u8 //u8 = u64/ROUNDS
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_encrypt_decrypt() {
+        let data: u64 = 123456789;
+        let key: u64 = 123;
+
+        assert_eq!(data, decrypt(encrypt(data,key),key));
+    }
 }
