@@ -2,6 +2,7 @@ use std::io::{Read, Write};
 
 use crate::feistel::cipher;
 use crate::feistel::reverse_key;
+use crate::util::word_to_bytes;
 
 pub fn encrypt_stream(src: &mut dyn Read, out: &mut dyn Write, key: u64) -> Result<(), Box<dyn std::error::Error>> {
     use_stream(src, out, key)
@@ -38,13 +39,4 @@ fn use_stream(src: &mut dyn Read, out: &mut dyn Write, key: u64) -> Result<(), B
     }
 
     Ok(())
-}
-
-fn word_to_bytes(word: u64) -> [u8; 8] {
-    let mut arr: [u8; 8] = [0,0,0,0,0,0,0,0];
-    for i in 1..=8 {
-        arr[i-1] = (word >> (8 - i)*8) as u8
-    }
-
-    arr
 }
