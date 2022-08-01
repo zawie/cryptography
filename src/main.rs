@@ -1,12 +1,30 @@
-use crypto::feisel::encrypt;
-use crypto::feisel::decrypt;
+use std::fs::File;
+use std::fs::OpenOptions;
+
+use crypto::network::encrypt_stream;
+use crypto::network::decrypt_stream;
 
 fn main() {
-    let data = 1234567890;
-    let key = 3;
+    let key = 0x2ab56ef8dc104566;
 
-    let cipher = encrypt(data,key);
-    let decrypted_cipher = decrypt(cipher, key);
+    let mut data_read = File::open("./resources/data.txt").unwrap();
 
-    println!("original data\t{}\nencrypted data\t{:x}\nuncrypted data\t{}", data, cipher, decrypted_cipher)
+    let mut encrypted_write = OpenOptions::new()
+        .write(true)
+        .append(true)
+        .open("./resources/encrypted_data.txt")
+        .unwrap();
+
+    encrypt_stream(&mut data_read, &mut encrypted_write, key);
+
+    let mut encrypted_read = File::open("./resources/encrypted_data.txt").unwrap();
+
+    let mut decrypted_write = OpenOptions::new()
+        .write(true)
+        .append(true)
+        .open("./resources/decrypted_data.txt")
+        .unwrap();
+
+    decrypt_stream(&mut encrypted_read, &mut decrypted_write, key);
+
 }

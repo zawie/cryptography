@@ -61,7 +61,7 @@ mod tests {
 
     #[test]
     fn test_encrypt_decrypt() {
-        let data: u64 = 123456789;
+        let data: u64 = 0xab48105;
         let key: u64 = 123;
 
         assert_eq!(data, decrypt(encrypt(data,key),key));
