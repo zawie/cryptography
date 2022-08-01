@@ -1,7 +1,7 @@
 use std::io::{Read, Write};
 
-use crate::feisel::cipher;
-use crate::feisel::reverse_key;
+use crate::feistel::cipher;
+use crate::feistel::reverse_key;
 
 pub fn encrypt_stream(src: &mut dyn Read, out: &mut dyn Write, key: u64) -> Result<(), Box<dyn std::error::Error>> {
     use_stream(src, out, key)
