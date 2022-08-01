@@ -1,6 +1,3 @@
-use std::fs::File;
-use std::fs::OpenOptions;
-
 use crypto::nonce::encrypt_stream;
 use crypto::nonce::decrypt_stream;
 
@@ -14,7 +11,7 @@ fn main() {
     let encrypt_path = "./resources/encrypted_data";
     let output_path = "./resources/output.webp";
 
-    let mut data_read =open_read(input_path)
+    let mut data_read = open_read(input_path);
     let mut encrypted_write = open_write(encrypt_path);
     encrypt_stream(&mut data_read, &mut encrypted_write, key);
 
