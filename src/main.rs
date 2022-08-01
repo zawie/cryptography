@@ -1,8 +1,8 @@
 use std::fs::File;
 use std::fs::OpenOptions;
 
-use crypto::network::encrypt_stream;
-use crypto::network::decrypt_stream;
+use crypto::nonce::encrypt_stream;
+use crypto::nonce::decrypt_stream;
 
 fn main() {
     let key = 0x2ab56ef8dc104566;

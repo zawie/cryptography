@@ -40,7 +40,6 @@ fn use_stream(src: &mut dyn Read, out: &mut dyn Write, key: u64) -> Result<(), B
     Ok(())
 }
 
-
 fn word_to_bytes(word: u64) -> [u8; 8] {
     let mut arr: [u8; 8] = [0,0,0,0,0,0,0,0];
     for i in 1..=8 {
