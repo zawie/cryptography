@@ -1,5 +1,5 @@
-use crypto::nonce::encrypt_stream;
-use crypto::nonce::decrypt_stream;
+use crypto::countermode::encrypt_stream;
+use crypto::countermode::decrypt_stream;
 
 use crypto::fileio::open_read;
 use crypto::fileio::open_write;
