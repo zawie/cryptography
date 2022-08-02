@@ -38,9 +38,6 @@ pub fn encrypt_stream(src: &mut dyn Read, out: &mut dyn Write, key: u64) -> Resu
     }
     out.write(&word_to_bytes(cipher(nonce + counter + 1, key) ^ buff));
 
-    println!("Pad count: {} ({:x})", pad_count, pad_count);
-    println!("Last word: {:x}", buff);
-
     Ok(())
 }
 
@@ -58,7 +55,6 @@ pub fn decrypt_stream(src: &mut dyn Read, out: &mut dyn Write, key: u64) -> Resu
         }
     }
     let nonce: u64 = cipher(encrypted_nonce, reverse_key(key));
-    println!("Nonce decrypted: {:x}", nonce);
 
     let mut counter: u64 = 0;
     let mut buff: u64 = 0;
@@ -70,11 +66,11 @@ pub fn decrypt_stream(src: &mut dyn Read, out: &mut dyn Write, key: u64) -> Resu
             if counter > 0 {
                 //Write last word
                 out.write(&word_to_bytes(cipher(nonce + counter + 1, key) ^ buff));
+
+                //Reset buffer
+                buff = 0;
             }
-
-            //Reset buffer
-            buff = 0;
-
+            
             //Write first byte into buff
             let byte = byte_result?;
             buff += (byte as u64) << (8*(7-(counter % 8)));
@@ -90,7 +86,6 @@ pub fn decrypt_stream(src: &mut dyn Read, out: &mut dyn Write, key: u64) -> Resu
 
             //Write last word, excluding padding
             out.write(&word_to_bytes(decrypted_buff)[0..(8-pad_count as usize)]);
-            println!("buff: {:x}", decrypted_buff);
 
             //Finish decrypting
             break;
