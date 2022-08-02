@@ -4,6 +4,7 @@ use crypto::countermode::decrypt_stream;
 use crypto::fileio::open_read;
 use crypto::fileio::open_write;
 
+#[allow(unused_must_use)]
 fn main() {
     let key = 0x2ab56ef8dc104566;
 

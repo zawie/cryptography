@@ -4,6 +4,7 @@ use crate::feistel::cipher;
 use crate::feistel::reverse_key;
 use crate::util::word_to_bytes;
 
+#[allow(unused_must_use)]
 pub fn encrypt_stream(src: &mut dyn Read, out: &mut dyn Write, key: u64) -> Result<(), Box<dyn std::error::Error>> {
     let mut bytes = src.bytes();
     
@@ -41,6 +42,7 @@ pub fn encrypt_stream(src: &mut dyn Read, out: &mut dyn Write, key: u64) -> Resu
     Ok(())
 }
 
+#[allow(unused_must_use)]
 pub fn decrypt_stream(src: &mut dyn Read, out: &mut dyn Write, key: u64) -> Result<(), Box<dyn std::error::Error>> {
     let mut bytes = src.bytes();
     
