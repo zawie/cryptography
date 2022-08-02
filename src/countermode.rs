@@ -107,3 +107,24 @@ pub fn decrypt_stream(src: &mut dyn Read, out: &mut dyn Write, key: u64) -> Resu
 
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    
+    #[test]
+    fn test_stream_cipher() {
+        let key = 0x2ab56ef8dc104566;
+
+        let src: &str = "Hello, world! This is a test string to verify encryption peserves original information.";
+        let data: Vec<u8> = src.as_bytes().to_vec();
+
+        let mut cipher: Vec<u8> = vec!();
+        let mut decipher: Vec<u8> = vec!();
+
+        encrypt_stream(&mut data.as_slice(), &mut cipher, key);
+        decrypt_stream(&mut cipher.as_slice(), &mut decipher, key);
+
+        assert_eq!(data, decipher);
+    }
+}
