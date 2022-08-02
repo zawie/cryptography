@@ -8,7 +8,7 @@ pub fn encrypt_stream(src: &mut dyn Read, out: &mut dyn Write, key: u64) -> Resu
     let mut bytes = src.bytes();
     
     //Generate nonce and write it to output
-    let nonce: u64 = 0xa1b2034cdef10000;
+    let nonce: u64 = 0xa1b2034cdef10000; //TODO: Create a CSPRNG to generate this nonce
     out.write(&word_to_bytes(cipher(nonce, key))); 
 
     let mut counter: u64 = 0;
@@ -70,7 +70,7 @@ pub fn decrypt_stream(src: &mut dyn Read, out: &mut dyn Write, key: u64) -> Resu
                 //Reset buffer
                 buff = 0;
             }
-            
+
             //Write first byte into buff
             let byte = byte_result?;
             buff += (byte as u64) << (8*(7-(counter % 8)));
