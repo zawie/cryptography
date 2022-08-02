@@ -116,7 +116,7 @@ mod tests {
     fn test_stream_cipher() {
         let key = 0x2ab56ef8dc104566;
 
-        let src: &str = "Hello, world! This is a test string to verify encryption peserves original information.";
+        let src: &str = "Hello, world! This is a test string to verify encryption preserves original information.";
         let data: Vec<u8> = src.as_bytes().to_vec();
 
         let mut cipher: Vec<u8> = vec!();
