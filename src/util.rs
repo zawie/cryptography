@@ -14,9 +14,6 @@ mod tests {
 
     #[test]
     fn test_word_to_bytes() {
-        let data: u64 = 0xab48105;
-        let key: u64 = 123;
-
         assert_eq!([0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef], word_to_bytes(0x0123456789abcdef));
     }
 }
