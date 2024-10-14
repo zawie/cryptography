@@ -18,11 +18,16 @@ Options:
   -V, --version  Print version
 ```
 
-## Example
+## Examples
 
 ```cli
 cat sensitive.png | feistel encrypt --key 123 > encrypted.dat
 cat encrypted.dat | feistel decrypt --key 123 > sensitive_decrypted.png
+```
+
+```cli
+echo 'Hello, world!' | feistel encrypt | feistel decrypt 
+Hello, world!
 ```
 
 ## About
