@@ -1,3 +1,6 @@
+# Obvious Note
+Do not use this implementation in production. This is just a hobby repository.
+
 # Feistel Cipher
 
 ## Usage
